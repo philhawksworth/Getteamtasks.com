@@ -21,6 +21,35 @@ def deploy():
     """Deployment actions"""
     export_release()
     
+def initenv():
+    '''Initialise the environment on the server'''
+    make_release_location()
+    create_web_root()    
+    enable_site()
+
+
+def make_release_location():
+    '''Create the release code location on the server'''
+    command = 'mkdir %(release_path)s'
+    sudo(command % env)
+    command = 'chown -R ubuntu:ubuntu %(release_path)s'
+    sudo(command % env)
+    
+    
+def create_web_root():
+    '''Create the web root location'''
+    command = 'mkdir %(path)s'
+    sudo(command % env)
+    command = 'chown -R ubuntu:ubuntu %(path)s'
+    sudo(command % env)
+
+
+def enable_site():
+    '''Enable the new website'''
+    command = 'a2ensite %(apache)s'
+    sudo(command % env)    
+    restart()
+        
 
 def export_release():
     """Exports a release with the current time and date"""
